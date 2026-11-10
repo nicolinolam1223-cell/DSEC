@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問卷調查工資計算器</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .calculator-container {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 24px;
+            color: #0f172a;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-group:last-of-type {
+            border-bottom: none;
+        }
+
+        label {
+            flex: 1;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding-right: 15px;
+        }
+
+        .unit-price {
+            font-size: 0.85rem;
+            color: #64748b;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: right;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .currency-label {
+            font-size: 0.9rem;
+            color: #475569;
+            min-width: 35px;
+        }
+
+        .result-section {
+            margin-top: 24px;
+            background-color: #f1f5f9;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .result-row:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .total-amount {
+            font-size: 1.4rem;
+        }
+
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 15px;
+            }
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .input-wrapper {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-container">
+    <h1>問卷調查工資計算器</h1>
+    
+    <!-- 項目 1 (全部完成問卷 + 附加專題問卷，帶可調整附加金額) -->
+    <div class="form-group">
+        <div>
+            <label for="type7">全部完成問卷 + 附加專題問卷</label>
+            <span class="unit-price" id="unitPrice7">單價：MOP 117.0 (基礎 $86 + 附加 $<span id="displayPrice6">31</span>)</span>
+            <div style="display: flex; align-items: center; gap: 5px; margin-top: 6px;">
+                <span style="font-size: 0.82rem; color: #64748b;">附加專題單價：MOP</span>
+                <input type="number" id="price6" min="0" value="31" style="width: 65px; padding: 3px 6px; font-size: 0.85rem;" oninput="calculate()">
+            </div>
+        </div>
+        <div class="input-wrapper">
+            <input type="number" id="type7" min="0" value="0" oninput="calculate()">
+            <span class="currency-label">份</span>
+        </div>
+    </div>
+
+    <!-- 項目 2 -->
+    <div class="form-group">
+        <div>
+            <label for="type1">全部完成問卷</label>
+            <span class="unit-price">單價：MOP 86.0</span>
+        </div>
+        <div class="input-wrapper">
+            <input type="number" id="type1" min="0" value="0" oninput="calculate()">
+            <span class="currency-label">份</span>
+        </div>
+    </div>
+
+    <!-- 項目 3 -->
+    <div class="form-group">
+        <div>
+            <label for="type2">住戶完成網上填報問卷</label>
+            <span class="unit-price">單價：MOP 58.0</span>
+        </div>
+        <div class="input-wrapper">
+            <input type="number" id="type2" min="0" value="0" oninput="calculate()">
+            <span class="currency-label">份</span>
+        </div>
+    </div>
+
+    <!-- 項目 4 -->
+    <div class="form-group">
+        <div>
+            <label for="type3">全部完成特難個案（額外支付）</label>
+            <span class="unit-price">單價：MOP 18.0</span>
+        </div>
+        <div class="input-wrapper">
+            <input type="number" id="type3" min="0" value="0" oninput="calculate()">
+            <span class="currency-label">份</span>
+        </div>
+    </div>
+
+    <!-- 項目 5 -->
+    <div class="form-group">
+        <div>
+            <label for="type4">拒絕受訪</label>
+            <span class="unit-price">單價：MOP 21.0</span>
+        </div>
+        <div class="input-wrapper">
+            <input type="number" id="type4" min="0" value="0" oninput="calculate()">
+            <span class="currency-label">份</span>
+        </div>
+    </div>
+
+    <!-- 項目 6 -->
+    <div class="form-group">
+        <div>
+            <label for="type5">未能接觸 / 非作居住用途/空置/第二居所</label>
+            <span class="unit-price">單價：MOP 18.0</span>
+        </div>
+        <div class="input-wrapper">
+            <input type="number" id="type5" min="0" value="0" oninput="calculate()">
+            <span class="currency-label">份</span>
+        </div>
+    </div>
+
+    <!-- 結算區 -->
+    <div class="result-section">
+        <div class="result-row">
+            <span>總調查份數：</span>
+            <span id="totalCount">0 份</span>
+        </div>
+        <div class="result-row">
+            <span>總工資金額：</span>
+            <span class="total-amount">MOP <span id="totalAmount">0.00</span></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        // 取得各項數量
+        const q7 = parseFloat(document.getElementById('type7').value) || 0;
+        const q1 = parseFloat(document.getElementById('type1').value) || 0;
+        const q2 = parseFloat(document.getElementById('type2').value) || 0;
+        const q3 = parseFloat(document.getElementById('type3').value) || 0;
+        const q4 = parseFloat(document.getElementById('type4').value) || 0;
+        const q5 = parseFloat(document.getElementById('type5').value) || 0;
+
+        // 取得第一項中可變動的附加問卷單價
+        const p6 = parseFloat(document.getElementById('price6').value) || 0;
+        document.getElementById('displayPrice6').innerText = p6;
+
+        // 計算第 7 項（第一個項目）的總單價（86.0 + 附加問卷單價）
+        const p7 = 86.0 + p6;
+        document.getElementById('unitPrice7').innerHTML = '單價：MOP ' + p7.toFixed(1) + ' (基礎 $86 + 附加 $<span id="displayPrice6">' + p6 + '</span>)';
+
+        // 計算各項總份數
+        const totalCount = q7 + q1 + q2 + q3 + q4 + q5;
+
+        // 計算各項金額
+        const amount7 = q7 * p7;
+        const amount1 = q1 * 86.0;
+        const amount2 = q2 * 58.0;
+        const amount3 = q3 * 18.0;
+        const amount4 = q4 * 21.0;
+        const amount5 = q5 * 18.0;
+
+        const totalAmount = amount7 + amount1 + amount2 + amount3 + amount4 + amount5;
+
+        // 顯示結果
+        document.getElementById('totalCount').innerText = totalCount + ' 份';
+        document.getElementById('totalAmount').innerText = totalAmount.toFixed(2);
+    }
+</script>
+
+</body>
+</html>
